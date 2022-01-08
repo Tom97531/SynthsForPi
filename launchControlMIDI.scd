@@ -45,7 +45,8 @@
 // ~bRight =
 	104, {arg val; if (val == 127, {~loadSample.value(2);});},
 // ~bLeft =
-	105, {arg val; if (val == 127, {~loadSample.value(3);});}]);
+	105, {arg val; if (val == 127, {~loadSample.value(3);});}
+]);
 
 // MIDI note
 ~launchControlXLNote = Dictionary.newFrom([
@@ -74,19 +75,59 @@
 	105, nil
 ]);
 
+~launchControlCC = Dictionary.newFrom([
+//~k1 =
+	21, {arg val; ~grans[0].set(\rate, val.linlin(0, 127, 0, 10));},
+	22, {arg val; ~grans[1].set(\rate, val.linlin(0, 127, 0, 10));},
+	23, {arg val; ~grans[2].set(\rate, val.linlin(0, 127, 0, 10));},
+	24, {arg val; ~grans[3].set(\rate, val.linlin(0, 127, 0, 10));},
+	25, {arg val; ~grans[4].set(\rate, val.linlin(0, 127, 0, 10));},
+	26, nil,
+	27, nil,
+	28, nil,
+//~k2 =
+	41, {arg val; ~grans[0].set(\amp, val.linlin(0, 127, 0, 0.9));},
+	42, {arg val; ~grans[1].set(\amp, val.linlin(0, 127, 0, 0.9));},
+	43, {arg val; ~grans[2].set(\amp, val.linlin(0, 127, 0, 0.9));},
+	44, {arg val; ~grans[3].set(\amp, val.linlin(0, 127, 0, 0.9));},
+	45, {arg val; ~grans[4].set(\amp, val.linlin(0, 127, 0, 0.9));},
+	46, nil,
+	47, nil,
+	48, nil
+]);
+
+~launchControlXLNote = Dictionary.newFrom([
+// ~bFocus =
+	9,  nil,
+	10, nil,
+	11, nil,
+	12, nil,
+	25, nil,
+	26, nil,
+	27, nil,
+	28, nil,
+]);
+
 MIDIClient.init;
 MIDIIn.connectAll;
 
 MIDIdef.noteOn(\noteOneTest, {
 	arg val, num, chan, src;
 	[val, num, chan, src].postln;
-	~launchControlXLNote[num].value;
+	if(chan == 0, {
+		~launchControlNote[num].value;
+	},{
+		~launchControlXLNote[num].value;
+	});
 });
 
 MIDIdef.cc(\ccTest, {
 	arg val, chan, src;
 	[val, chan, src].postln;
-
-	~launchControlXLCC[chan].value(val);
+	if(src == 0, {
+		~launchControlCC[chan].value(val);
+	},{
+		~launchControlXLCC[chan].value(val);
+	});
 });
 )

@@ -2,7 +2,7 @@
 // read wave buffer
 // TODO: make a class of it
 (
-~sndDir = PathName.new("/home/tpiquet/perso/supercollider/GranControlXL/snd/");
+~sndDir = PathName.new(thisProcess.nowExecutingPath.dirname ++ "/snd");
 ~currentSoundDirNum = 0;
 ~currentSoundDir = ~sndDir.entries[0];
 ~currentSampleNum = 0;

@@ -57,6 +57,7 @@ SynthDef.new(\LPF, {
 	freq=15000, q=1;
 	var sig;
 	sig = In.ar(in, 1);
-	sig = BLowPass4.ar(sig, freq, q);
+	sig = CrossoverDistortion.ar(sig, amp = 0.1, smooth = 0.5);
+	sig = MoogFF.ar(sig, freq, q);
 	Out.ar(out, sig);
 }).add;

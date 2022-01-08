@@ -1,9 +1,10 @@
 // INIT
 (
-s.boot;
-"./synthsDef.scd".loadRelative;
-"./launchControlMIDI.scd".loadRelative;
-"./loadSample.scd".loadRelative;
+s.waitForBoot({
+	"./synthsDef.scd".loadRelative;
+	"./launchControlMIDI.scd".loadRelative;
+	"./loadSample.scd".loadRelative;
+};)
 )
 
 // instanciate granControlXL
