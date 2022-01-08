@@ -109,25 +109,40 @@
 ]);
 
 MIDIClient.init;
+// 5.wait;
 MIDIIn.connectAll;
+// 5.wait;
 
 MIDIdef.noteOn(\noteOneTest, {
 	arg val, num, chan, src;
-	[val, num, chan, src].postln;
-	if(chan == 0, {
-		~launchControlNote[num].value;
-	},{
-		~launchControlXLNote[num].value;
+	~currentNoteOn = [val, num, chan, src];
+
+	if(~currentNoteOn != ~previousNoteOn, {
+		~currentNoteOn.postln;
+		if(chan == 0, {
+			~launchControlNote[num].value;
+		},{
+			~launchControlXLNote[num].value;
+		});
 	});
+	~previousNoteOn = ~currentNoteOn;
+	AppClock.sched(0.2, {~previousNoteOn = [0,0,0,0];});
 });
 
 MIDIdef.cc(\ccTest, {
 	arg val, chan, src;
-	[val, chan, src].postln;
-	if(src == 0, {
-		~launchControlCC[chan].value(val);
-	},{
-		~launchControlXLCC[chan].value(val);
+	~currentCC = [val, chan, src];
+
+	if(~currentCC != ~previousC, {
+		~currentCC.postln;
+		[val, chan, src].postln;
+		if(src == 0, {
+			~launchControlCC[chan].value(val);
+		},{
+			~launchControlXLCC[chan].value(val);
+		});
 	});
+	~previousCC = ~currentCC;
+	AppClock.sched(0.2, {~previousNoteOn = [0,0,0,0];});
 });
 )
