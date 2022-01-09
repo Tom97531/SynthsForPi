@@ -20,7 +20,7 @@ s.waitForBoot({
 5.do({
 	arg i;
 	~grans[i] = Synth.new(\gs2, [
-		\buf, b,
+		\buf, ~buffers[i],
 		\amp, 0,
 		\sync, 1,
 		\posRand, 0.005,

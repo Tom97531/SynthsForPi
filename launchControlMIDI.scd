@@ -27,7 +27,7 @@
 	52, {arg val; ~grans[3].set(\dens, val);},
 	53, {arg val; ~grans[4].set(\dens, val);},
 	54, nil,
-	55, {arg val; ~lpf.set(\q, val.linlin(0, 127, 0, 1));},
+	55, {arg val; ~lpf.set(\q, val.linlin(0, 127, 0, 4));},
 	56, {arg val; ~reverb.set(\size, val.linlin(0, 127, 10, 50));},
 // ~fader =
 	77, {arg val; ~grans[0].set(\pos, val.linlin(0, 127, 0, 1));},
@@ -93,10 +93,18 @@
 	45, {arg val; ~grans[4].set(\amp, val.linlin(0, 127, 0, 0.9));},
 	46, nil,
 	47, nil,
-	48, nil
+	48, nil,
+// ~bUp =
+	116, {arg val; if (val == 127, {~loadSample.value(0, ~selectedGran);});},
+// ~bDown =
+	117, {arg val; if (val == 127, {~loadSample.value(1, ~selectedGran);});},
+// ~bRight =
+	114, {arg val; if (val == 127, {~loadSample.value(2, ~selectedGran);});},
+// ~bLeft =
+	115, {arg val; if (val == 127, {~loadSample.value(3, ~selectedGran);});}
 ]);
 
-~launchControlXLNote = Dictionary.newFrom([
+~launchControlNote = Dictionary.newFrom([
 // ~bFocus =
 	9,  nil,
 	10, nil,
@@ -120,13 +128,31 @@ MIDIdef.noteOn(\noteOneTest, {
 	if(~currentNoteOn != ~previousNoteOn, {
 		~currentNoteOn.postln;
 		if(chan == 0, {
-			~launchControlNote[num].value;
+			~selectedGran = num - 9;
+			if(~selectedGran > 4, {~selectedGran = num - 21});
 		},{
 			~launchControlXLNote[num].value;
 		});
 	});
 	~previousNoteOn = ~currentNoteOn;
 	AppClock.sched(0.2, {~previousNoteOn = [0,0,0,0];});
+});
+
+MIDIdef.noteOff(\noteOff, {
+	arg val, num, chan, src;
+	~currentNoteOff = [val, num, chan, src];
+
+	if(~currentNoteOff != ~previousNoteOff, {
+		~currentNoteOff.postln;
+		if(chan == 0, {
+			~selectedGran = -1;
+		},{
+			~launchControlXLNote[num].value;
+		});
+	});
+	~previousNoteOff = ~currentNoteOff;
+	AppClock.sched(0.2, {~previousNoteOff = [0,0,0,0];});
+
 });
 
 MIDIdef.cc(\ccTest, {

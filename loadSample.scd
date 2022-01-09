@@ -8,10 +8,15 @@
 ~currentSampleNum = 0;
 ~currentSample = ~currentSoundDir.entries[0];
 
-b = Buffer.readChannel(s, ~currentSample.fullPath, channels:[0]);
+~buffers = Array.newClear(5);
+
+~buffers.do({
+	arg item;
+	item = Buffer.readChannel(s, ~currentSample.fullPath, channels:[0]);
+});
 
 ~loadSample = {
-	arg keyPressed;
+	arg keyPressed, bufferNumber;
 
 	// change directory
 	if (keyPressed == 0, { // up
@@ -49,11 +54,9 @@ b = Buffer.readChannel(s, ~currentSample.fullPath, channels:[0]);
 	});
 
 	~currentSample = ~currentSoundDir.entries[~currentSampleNum];
-	b = Buffer.readChannel(s, ~currentSample.fullPath, channels:[0]);
+	~buffers[bufferNumber] = Buffer.readChannel(s, ~currentSample.fullPath, channels:[0]);
 	// upgate all buffers
-	~grans.do({
-		arg gran;
-		gran.set(\buf, b);
+	~grans[bufferNumber].set(\buf, ~buffers[bufferNumber]);
 	});
 };
 )
