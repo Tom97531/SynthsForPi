@@ -75,13 +75,20 @@
 	105, nil
 ]);
 
+~getRate = {
+	arg val;
+	//TODO use a switch for free tuning
+	// val.linlin(0, 127, 0, 10);
+	Scale.chromatic(\just).degreeToRatio(val.linlin(0, 127, -24, 24).round(1));
+};
+
 ~launchControlCC = Dictionary.newFrom([
 //~k1 =
-	21, {arg val; ~grans[0].set(\rate, val.linlin(0, 127, 0, 10));},
-	22, {arg val; ~grans[1].set(\rate, val.linlin(0, 127, 0, 10));},
-	23, {arg val; ~grans[2].set(\rate, val.linlin(0, 127, 0, 10));},
-	24, {arg val; ~grans[3].set(\rate, val.linlin(0, 127, 0, 10));},
-	25, {arg val; ~grans[4].set(\rate, val.linlin(0, 127, 0, 10));},
+	21, {arg val; ~grans[0].set(\rate, ~getRate.(val));},
+	22, {arg val; ~grans[1].set(\rate, ~getRate.(val));},
+	23, {arg val; ~grans[2].set(\rate, ~getRate.(val));},
+	24, {arg val; ~grans[3].set(\rate, ~getRate.(val));},
+	25, {arg val; ~grans[4].set(\rate, ~getRate.(val));},
 	26, nil,
 	27, nil,
 	28, nil,
