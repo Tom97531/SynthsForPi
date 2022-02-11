@@ -32,32 +32,29 @@ SynthDef.new(\gs2, {
 
 	sig = sig * amp;
 
-	Out.ar(out, sig);
+	// adds softclipping to avoid harsh digital distortion
+	Out.ar(out, sig.softclip);
 }).add;
 
 
-// Mono in reverb
-
+// Reverb
 SynthDef.new(\reverb, {
 	arg in, out=0,
-	mix=0.33, size=10, damp=0.5, time=3;
-	var sig;
-	sig = In.ar(in, 1);
-	sig = GVerb.ar(sig, size, time, damp, 0.8, 15, 1-mix, mix, mix-0.2)!2;
-	// sig = GVerb.ar(sig, size, time, damp)!2;
-	// sig = GVerb.ar(sig, size)!2;
+	mix=0, size=10, damp=0.5, time=3;
+	var sig, rev;
+	sig = In.ar(in, 1)!2;
+	rev = JPverb.ar(sig, size);
+	sig = ((sig*(1-mix)) + (rev*mix));
 	Out.ar(out, sig);
 }).add;
 
 
 // Low pass filter
-
 SynthDef.new(\LPF, {
 	arg in, out,
 	freq=15000, q=1;
 	var sig;
 	sig = In.ar(in, 1);
-	// sig = CrossoverDistortion.ar(sig, 0.1, 0.5);
 	sig = MoogFF.ar(sig, freq, q);
 	Out.ar(out, sig);
 }).add;

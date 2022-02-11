@@ -57,6 +57,5 @@
 	~buffers[bufferNumber] = Buffer.readChannel(s, ~currentSample.fullPath, channels:[0]);
 	// upgate all buffers
 	~grans[bufferNumber].set(\buf, ~buffers[bufferNumber]);
-	});
-};
+	};
 )

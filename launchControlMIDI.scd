@@ -51,20 +51,20 @@
 // MIDI note
 ~launchControlXLNote = Dictionary.newFrom([
 // ~bFocus =
-	41, {~grans[0].set(\amp, 0);},
-	42, {~grans[1].set(\amp, 0);},
-	43, {~grans[2].set(\amp, 0);},
-	44, {~grans[3].set(\amp, 0);},
-	57, {~grans[4].set(\amp, 0);},
+	41, {~grans[0].set(\sync, 1);},
+	42, {~grans[1].set(\sync, 1);},
+	43, {~grans[2].set(\sync, 1);},
+	44, {~grans[3].set(\sync, 1);},
+	57, {~grans[4].set(\sync, 1);},
 	58, nil,
 	59, nil,
 	60, nil,
 // ~bControl =
-	73, {~grans[0].set(\amp, 0.5);},
-	74, {~grans[1].set(\amp, 0.5);},
-	75, {~grans[2].set(\amp, 0.5);},
-	76, {~grans[3].set(\amp, 0.5);},
-	89, {~grans[4].set(\amp, 0.5);},
+	73, {~grans[0].set(\sync, 0);},
+	74, {~grans[1].set(\sync, 0);},
+	75, {~grans[2].set(\sync, 0);},
+	76, {~grans[3].set(\sync, 0);},
+	89, {~grans[4].set(\sync, 0);},
 	90, nil,
 	91, nil,
 	92, nil,
@@ -176,6 +176,6 @@ MIDIdef.cc(\ccTest, {
 		});
 	});
 	~previousCC = ~currentCC;
-	AppClock.sched(0.2, {~previousNoteOn = [0,0,0,0];});
+	AppClock.sched(0.2, {~previousCC = [0,0,0,0];});
 });
 )
